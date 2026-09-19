@@ -1,0 +1,1279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Shipping Fee Calculator</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Shipping Fee Calculator" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Shipping Fee Calculator&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(--background) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --card-foreground: var(--foreground);
+  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: light-dark(
+    rgb(26 28 31 / 49.4%),
+    rgb(255 255 255 / 49.8%)
+  );
+  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
+  --accent-foreground: var(--primary);
+  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --input: light-dark(
+    rgb(26 28 31 / 11.8%),
+    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+  );
+  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
+  --font-size-base: 14px;
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: 12.5px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+  --color-background-primary: var(--background);
+  --color-text-primary: var(--foreground);
+  --color-border-secondary: var(--border);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--viz-font-weight-medium);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed=&quot;true&quot;],
+    [aria-selected=&quot;true&quot;],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;shipping-fee-calculator&quot;&gt;
+  &lt;style&gt;
+    #shipping-fee-calculator .quote-table { width: 100%; border-collapse: collapse; }
+    #shipping-fee-calculator .quote-table th, #shipping-fee-calculator .quote-table td { padding: .45rem; border-bottom: 1px solid var(--border); text-align: left; }
+    #shipping-fee-calculator .quote-table th:last-child, #shipping-fee-calculator .quote-table td:last-child { text-align: right; }
+    #shipping-fee-calculator .report { margin-top: 1rem; }
+    #shipping-fee-calculator .field { flex: 1 1 10rem; }
+    #shipping-fee-calculator .amount { font-variant-numeric: tabular-nums; }
+    @media print { #shipping-fee-calculator .no-print { display:none; } #shipping-fee-calculator .card { break-inside: avoid; } }
+  &lt;/style&gt;
+
+  &lt;section class=&quot;viz-controls no-print&quot; aria-label=&quot;Shipment details&quot;&gt;
+    &lt;label class=&quot;form-label field&quot;&gt;From PIN code
+      &lt;input id=&quot;fromPin&quot; class=&quot;form-control&quot; inputmode=&quot;numeric&quot; maxlength=&quot;6&quot; value=&quot;560001&quot; aria-describedby=&quot;pinHelp&quot;&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;form-label field&quot;&gt;To PIN code
+      &lt;input id=&quot;toPin&quot; class=&quot;form-control&quot; inputmode=&quot;numeric&quot; maxlength=&quot;6&quot; value=&quot;400001&quot;&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;form-label field&quot;&gt;Item weight (kg)
+      &lt;input id=&quot;itemWeight&quot; class=&quot;form-control&quot; type=&quot;number&quot; min=&quot;0.01&quot; step=&quot;0.01&quot; value=&quot;4&quot;&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;form-label field&quot;&gt;Shipping option
+      &lt;select id=&quot;serviceLevel&quot; class=&quot;form-select&quot;&gt;
+        &lt;option value=&quot;regular&quot;&gt;Regular&lt;/option&gt;
+        &lt;option value=&quot;express&quot;&gt;Express&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/label&gt;
+    &lt;span id=&quot;pinHelp&quot; class=&quot;sr-only&quot;&gt;Enter six digit Indian PIN codes.&lt;/span&gt;
+  &lt;/section&gt;
+
+  &lt;section id=&quot;packingArea&quot; class=&quot;no-print&quot; aria-label=&quot;Packaging details&quot;&gt;
+    &lt;strong&gt;Inner packing (pre-packed pouches)&lt;/strong&gt;
+    &lt;div id=&quot;innerPackingOptions&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;viz-controls&quot;&gt;&lt;button id=&quot;addInnerPacking&quot; class=&quot;btn&quot; type=&quot;button&quot;&gt;Add inner packing&lt;/button&gt;&lt;/div&gt;
+    &lt;strong&gt;Outer packing&lt;/strong&gt;
+    &lt;div id=&quot;outerPackingOptions&quot;&gt;
+      &lt;div class=&quot;viz-controls packing-option&quot; data-stage=&quot;outer&quot; data-packing-index=&quot;1&quot;&gt;
+        &lt;strong&gt;Outer packing 1&lt;/strong&gt;
+        &lt;label class=&quot;form-label field&quot;&gt;Outer packing type
+          &lt;select class=&quot;form-select&quot; data-field=&quot;type&quot;&gt;
+            &lt;option value=&quot;carton-free&quot;&gt;Carton box — free size&lt;/option&gt;
+            &lt;option value=&quot;poly-free&quot;&gt;Poly pack — free size&lt;/option&gt;
+            &lt;option value=&quot;carton-5&quot;&gt;5 kg carton box&lt;/option&gt;
+            &lt;option value=&quot;carton-10&quot;&gt;10 kg carton box&lt;/option&gt;
+            &lt;option value=&quot;carton-15&quot;&gt;15 kg carton box&lt;/option&gt;
+            &lt;option value=&quot;carton-20&quot;&gt;20 kg carton box&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;form-label field&quot;&gt;&lt;span data-field=&quot;quantity-label&quot;&gt;No. of boxes&lt;/span&gt;
+          &lt;input class=&quot;form-control&quot; data-field=&quot;boxes&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;1&quot; value=&quot;1&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;form-label field&quot;&gt;Length (cm)
+          &lt;input class=&quot;form-control&quot; data-field=&quot;length&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;0.1&quot; value=&quot;1&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;form-label field&quot;&gt;Breadth (cm)
+          &lt;input class=&quot;form-control&quot; data-field=&quot;breadth&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;0.1&quot; value=&quot;1&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;form-label field&quot;&gt;Height (cm)
+          &lt;input class=&quot;form-control&quot; data-field=&quot;height&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;0.1&quot; value=&quot;1&quot;&gt;
+        &lt;/label&gt;
+        &lt;label class=&quot;form-label field&quot;&gt;Total tare weight (kg)
+          &lt;input class=&quot;form-control&quot; data-field=&quot;tare&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;0.001&quot; value=&quot;0&quot;&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;viz-controls&quot;&gt;&lt;button id=&quot;addOuterPacking&quot; class=&quot;btn&quot; type=&quot;button&quot;&gt;Add outer packing&lt;/button&gt;&lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;viz-controls no-print&quot; aria-label=&quot;Quote actions&quot;&gt;
+    &lt;button id=&quot;calculate&quot; class=&quot;btn btn-primary&quot; type=&quot;button&quot;&gt;Calculate quote&lt;/button&gt;
+    &lt;button id=&quot;clearQuote&quot; class=&quot;btn&quot; type=&quot;button&quot;&gt;Clear &amp;amp; reset&lt;/button&gt;
+    &lt;span id=&quot;validation&quot; class=&quot;text-destructive&quot; role=&quot;alert&quot;&gt;&lt;/span&gt;
+  &lt;/section&gt;
+
+  &lt;section id=&quot;quoteResults&quot; class=&quot;viz-grid&quot; aria-label=&quot;Shipping calculation summary&quot; hidden&gt;
+    &lt;article class=&quot;card viz-stat&quot;&gt;&lt;div class=&quot;text-muted&quot;&gt;Chargeable weight&lt;/div&gt;&lt;div id=&quot;chargeable&quot; class=&quot;viz-stat-value amount&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;weightNote&quot; class=&quot;text-small text-muted&quot;&gt;Actual or volumetric, whichever is higher&lt;/div&gt;&lt;/article&gt;
+    &lt;article class=&quot;card viz-stat&quot;&gt;&lt;div class=&quot;text-muted&quot;&gt;Shipment zone&lt;/div&gt;&lt;div id=&quot;zone&quot; class=&quot;viz-stat-value&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;zoneNote&quot; class=&quot;text-small text-muted&quot;&gt;Based on PIN prefix&lt;/div&gt;&lt;/article&gt;
+    &lt;article class=&quot;card viz-stat&quot;&gt;&lt;div class=&quot;text-muted&quot;&gt;Recommended carrier&lt;/div&gt;&lt;div id=&quot;recommended&quot; class=&quot;viz-stat-value&quot;&gt;—&lt;/div&gt;&lt;div id=&quot;recommendationNote&quot; class=&quot;text-small text-muted&quot;&gt;Best overall carrier score&lt;/div&gt;&lt;/article&gt;
+  &lt;/section&gt;
+
+  &lt;section id=&quot;carrierResults&quot; class=&quot;report&quot; aria-label=&quot;Carrier quote comparison&quot; hidden&gt;
+    &lt;table class=&quot;quote-table&quot;&gt;
+      &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Carrier&lt;/th&gt;&lt;th&gt;Service&lt;/th&gt;&lt;th&gt;Estimated TAT&lt;/th&gt;&lt;th&gt;Serviceability&lt;/th&gt;&lt;th&gt;Transit / SLA&lt;/th&gt;&lt;th&gt;Total cost&lt;/th&gt;&lt;th&gt;Reliability&lt;/th&gt;&lt;th&gt;Flexibility&lt;/th&gt;&lt;th&gt;Score&lt;/th&gt;&lt;th&gt;Fee incl. GST&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+      &lt;tbody id=&quot;quoteRows&quot;&gt;&lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/section&gt;
+
+  &lt;dialog id=&quot;quoteModal&quot; aria-labelledby=&quot;quoteModalTitle&quot;&gt;
+    &lt;article class=&quot;card report&quot; aria-live=&quot;polite&quot;&gt;
+    &lt;div class=&quot;viz-row&quot;&gt;&lt;span class=&quot;text-muted&quot;&gt;Quote reference&lt;/span&gt;&lt;strong id=&quot;quoteRef&quot;&gt;—&lt;/strong&gt;&lt;span class=&quot;text-muted&quot;&gt;Issued&lt;/span&gt;&lt;span id=&quot;issuedAt&quot;&gt;—&lt;/span&gt;&lt;/div&gt;
+    &lt;h2 id=&quot;quoteModalTitle&quot;&gt;Shipping quote&lt;/h2&gt;
+    &lt;div id=&quot;quoteDetails&quot;&gt;Enter shipment details and calculate your quote.&lt;/div&gt;
+    &lt;div class=&quot;viz-row&quot;&gt;&lt;span class=&quot;text-muted&quot;&gt;Recommended carrier&lt;/span&gt;&lt;strong id=&quot;reportCarrier&quot;&gt;—&lt;/strong&gt;&lt;span class=&quot;text-muted&quot;&gt;Estimated TAT&lt;/span&gt;&lt;strong id=&quot;reportTat&quot;&gt;—&lt;/strong&gt;&lt;span class=&quot;text-muted&quot;&gt;Shipping fee incl. 18% GST&lt;/span&gt;&lt;strong id=&quot;reportFee&quot; class=&quot;amount&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;
+    &lt;div id=&quot;scoreDetail&quot; class=&quot;text-small&quot;&gt;—&lt;/div&gt;
+    &lt;p class=&quot;text-small text-muted&quot;&gt;Indicative domestic rates only. Scores are a planning heuristic: 20 points each for serviceability, transit/SLA, total cost, reliability and operational flexibility. Confirm final freight, serviceability, remote-area charges and insurance with the selected carrier before booking.&lt;/p&gt;
+    &lt;div class=&quot;viz-controls&quot;&gt;&lt;a id=&quot;emailQuote&quot; class=&quot;btn&quot; href=&quot;#&quot;&gt;Send by email&lt;/a&gt;&lt;a id=&quot;whatsAppQuote&quot; class=&quot;btn&quot; href=&quot;#&quot;&gt;Send via WhatsApp&lt;/a&gt;&lt;button id=&quot;closeQuote&quot; class=&quot;btn btn-primary&quot; type=&quot;button&quot;&gt;Close&lt;/button&gt;&lt;/div&gt;
+    &lt;/article&gt;
+  &lt;/dialog&gt;
+
+  &lt;script&gt;
+    (() =&gt; {
+      const root = document.getElementById(&#x27;shipping-fee-calculator&#x27;);
+      const $ = (id) =&gt; root.querySelector(&#x27;#&#x27; + id);
+      const carriers = [
+        { name: &#x27;Bluedart&#x27;, base: 82, rate: 58, fit: &#x27;Priority / time-sensitive&#x27;, regularTat: &#x27;2–4 business days&#x27;, expressTat: &#x27;1–2 business days&#x27;, serviceability: 19, transit: 18, reliability: 19, flexibility: 16 },
+        { name: &#x27;Delhivery&#x27;, base: 58, rate: 42, fit: &#x27;Balanced e-commerce&#x27;, regularTat: &#x27;3–5 business days&#x27;, expressTat: &#x27;1–3 business days&#x27;, serviceability: 19, transit: 16, reliability: 17, flexibility: 19 },
+        { name: &#x27;DTDC&#x27;, base: 54, rate: 45, fit: &#x27;Wide domestic network&#x27;, regularTat: &#x27;3–6 business days&#x27;, expressTat: &#x27;2–4 business days&#x27;, serviceability: 18, transit: 14, reliability: 16, flexibility: 17 },
+        { name: &#x27;Anjani&#x27;, base: 49, rate: 39, fit: &#x27;Value road express&#x27;, regularTat: &#x27;4–7 business days&#x27;, expressTat: &#x27;2–4 business days&#x27;, serviceability: 15, transit: 12, reliability: 14, flexibility: 16 },
+        { name: &#x27;Professional courier&#x27;, base: 52, rate: 41, fit: &#x27;Regional value option&#x27;, regularTat: &#x27;4–7 business days&#x27;, expressTat: &#x27;2–5 business days&#x27;, serviceability: 16, transit: 13, reliability: 15, flexibility: 16 },
+        { name: &#x27;India Post&#x27;, base: 38, rate: 34, fit: &#x27;Economy / broad reach&#x27;, regularTat: &#x27;5–9 business days&#x27;, expressTat: &#x27;2–5 business days&#x27;, serviceability: 20, transit: 10, reliability: 16, flexibility: 14 }
+      ];
+      const shippingServices = {
+        regular: { label: &#x27;Regular&#x27;, feeMultiplier: 1, surcharge: 0, transitBonus: 0 },
+        express: { label: &#x27;Express&#x27;, feeMultiplier: 1.28, surcharge: 45, transitBonus: 2 }
+      };
+      const packingPresets = {
+        &#x27;carton-free&#x27;: { label: &#x27;Carton box — free size&#x27;, kind: &#x27;carton&#x27;, unitLabel: &#x27;boxes&#x27;, length: 1, breadth: 1, height: 1, tarePerBox: 0 },
+        &#x27;poly-free&#x27;: { label: &#x27;Poly pack — free size&#x27;, kind: &#x27;poly&#x27;, unitLabel: &#x27;packs&#x27;, length: 1, breadth: 1, height: 1, tarePerBox: 0 },
+        &#x27;carton-5&#x27;: { label: &#x27;5 kg carton box&#x27;, kind: &#x27;carton&#x27;, unitLabel: &#x27;boxes&#x27;, length: 28, breadth: 27, height: 35, tarePerBox: 0.8 },
+        &#x27;carton-10&#x27;: { label: &#x27;10 kg carton box&#x27;, kind: &#x27;carton&#x27;, unitLabel: &#x27;boxes&#x27;, length: 64, breadth: 26, height: 30, tarePerBox: 1.2 },
+        &#x27;carton-15&#x27;: { label: &#x27;15 kg carton box&#x27;, kind: &#x27;carton&#x27;, unitLabel: &#x27;boxes&#x27;, length: 60, breadth: 30, height: 34, tarePerBox: 1.3 },
+        &#x27;carton-20&#x27;: { label: &#x27;20 kg carton box&#x27;, kind: &#x27;carton&#x27;, unitLabel: &#x27;boxes&#x27;, length: 60, breadth: 40, height: 34, tarePerBox: 1.5 },
+        &#x27;pouch-250&#x27;: { label: &#x27;250 g pouch&#x27;, kind: &#x27;poly&#x27;, unitLabel: &#x27;pouches&#x27;, length: 1, breadth: 1, height: 1, tarePerBox: 0.014 },
+        &#x27;pouch-500&#x27;: { label: &#x27;500 g pouch&#x27;, kind: &#x27;poly&#x27;, unitLabel: &#x27;pouches&#x27;, length: 1, breadth: 1, height: 1, tarePerBox: 0.024 },
+        &#x27;pouch-1000&#x27;: { label: &#x27;1000 g pouch&#x27;, kind: &#x27;poly&#x27;, unitLabel: &#x27;pouches&#x27;, length: 1, breadth: 1, height: 1, tarePerBox: 0.028 },
+        &#x27;pouch-3000&#x27;: { label: &#x27;3000 g pouch&#x27;, kind: &#x27;poly&#x27;, unitLabel: &#x27;pouches&#x27;, length: 1, breadth: 1, height: 1, tarePerBox: 0.04 }
+      };
+      const money = new Intl.NumberFormat(&#x27;en-IN&#x27;, { style: &#x27;currency&#x27;, currency: &#x27;INR&#x27;, maximumFractionDigits: 0 });
+      const number = (id) =&gt; Number($(id).value);
+      const pinRegion = (pin) =&gt; ({ &#x27;1&#x27;:&#x27;North&#x27;, &#x27;2&#x27;:&#x27;North&#x27;, &#x27;3&#x27;:&#x27;North&#x27;, &#x27;4&#x27;:&#x27;West&#x27;, &#x27;5&#x27;:&#x27;South&#x27;, &#x27;6&#x27;:&#x27;South&#x27;, &#x27;7&#x27;:&#x27;East&#x27;, &#x27;8&#x27;:&#x27;East&#x27;, &#x27;9&#x27;:&#x27;East&#x27; })[pin[0]] || &#x27;&#x27;;
+      const getZone = (from, to) =&gt; {
+        if (from.slice(0, 3) === to.slice(0, 3)) return [&#x27;Local&#x27;, 0.78];
+        if (pinRegion(from) === pinRegion(to)) return [&#x27;Regional&#x27;, 0.95];
+        return [&#x27;National&#x27;, 1.18];
+      };
+      const newReference = () =&gt; {
+        const d = new Date();
+        const stamp = [d.getFullYear(), String(d.getMonth()+1).padStart(2,&#x27;0&#x27;), String(d.getDate()).padStart(2,&#x27;0&#x27;)].join(&#x27;&#x27;);
+        return &#x27;SFQ-&#x27; + stamp + &#x27;-&#x27; + String(Math.floor(1000 + Math.random() * 9000));
+      };
+      function outerPackingMarkup(index) {
+        return &#x27;&lt;div class=&quot;viz-controls packing-option&quot; data-stage=&quot;outer&quot; data-packing-index=&quot;&#x27; + index + &#x27;&quot;&gt;&lt;strong&gt;Outer packing &#x27; + index + &#x27;&lt;/strong&gt;&lt;label class=&quot;form-label field&quot;&gt;Outer packing type&lt;select class=&quot;form-select&quot; data-field=&quot;type&quot;&gt;&lt;option value=&quot;carton-free&quot;&gt;Carton box — free size&lt;/option&gt;&lt;option value=&quot;poly-free&quot;&gt;Poly pack — free size&lt;/option&gt;&lt;option value=&quot;carton-5&quot;&gt;5 kg carton box&lt;/option&gt;&lt;option value=&quot;carton-10&quot;&gt;10 kg carton box&lt;/option&gt;&lt;option value=&quot;carton-15&quot;&gt;15 kg carton box&lt;/option&gt;&lt;option value=&quot;carton-20&quot;&gt;20 kg carton box&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label class=&quot;form-label field&quot;&gt;&lt;span data-field=&quot;quantity-label&quot;&gt;No. of boxes&lt;/span&gt;&lt;input class=&quot;form-control&quot; data-field=&quot;boxes&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;1&quot; value=&quot;1&quot;&gt;&lt;/label&gt;&lt;label class=&quot;form-label field&quot;&gt;Length (cm)&lt;input class=&quot;form-control&quot; data-field=&quot;length&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;0.1&quot; value=&quot;1&quot;&gt;&lt;/label&gt;&lt;label class=&quot;form-label field&quot;&gt;Breadth (cm)&lt;input class=&quot;form-control&quot; data-field=&quot;breadth&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;0.1&quot; value=&quot;1&quot;&gt;&lt;/label&gt;&lt;label class=&quot;form-label field&quot;&gt;Height (cm)&lt;input class=&quot;form-control&quot; data-field=&quot;height&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;0.1&quot; value=&quot;1&quot;&gt;&lt;/label&gt;&lt;label class=&quot;form-label field&quot;&gt;Total tare weight (kg)&lt;input class=&quot;form-control&quot; data-field=&quot;tare&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;0.001&quot; value=&quot;0&quot;&gt;&lt;/label&gt;&lt;button class=&quot;btn btn-ghost remove-packing&quot; type=&quot;button&quot;&gt;Remove&lt;/button&gt;&lt;/div&gt;&#x27;;
+      }
+      function innerPackingMarkup(index) {
+        return &#x27;&lt;div class=&quot;viz-controls packing-option&quot; data-stage=&quot;inner&quot; data-packing-index=&quot;&#x27; + index + &#x27;&quot;&gt;&lt;strong&gt;Inner packing &#x27; + index + &#x27;&lt;/strong&gt;&lt;label class=&quot;form-label field&quot;&gt;Pre-packed pouch type&lt;select class=&quot;form-select&quot; data-field=&quot;type&quot;&gt;&lt;option value=&quot;pouch-250&quot;&gt;250 g pouch&lt;/option&gt;&lt;option value=&quot;pouch-500&quot;&gt;500 g pouch&lt;/option&gt;&lt;option value=&quot;pouch-1000&quot;&gt;1000 g pouch&lt;/option&gt;&lt;option value=&quot;pouch-3000&quot;&gt;3000 g pouch&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label class=&quot;form-label field&quot;&gt;&lt;span data-field=&quot;quantity-label&quot;&gt;No. of pouches&lt;/span&gt;&lt;input class=&quot;form-control&quot; data-field=&quot;boxes&quot; type=&quot;number&quot; min=&quot;1&quot; step=&quot;1&quot; value=&quot;1&quot;&gt;&lt;/label&gt;&lt;input data-field=&quot;length&quot; type=&quot;hidden&quot; value=&quot;1&quot;&gt;&lt;input data-field=&quot;breadth&quot; type=&quot;hidden&quot; value=&quot;1&quot;&gt;&lt;input data-field=&quot;height&quot; type=&quot;hidden&quot; value=&quot;1&quot;&gt;&lt;label class=&quot;form-label field&quot;&gt;Total tare weight (kg)&lt;input class=&quot;form-control&quot; data-field=&quot;tare&quot; type=&quot;number&quot; min=&quot;0&quot; step=&quot;0.001&quot; value=&quot;0.014&quot; readonly&gt;&lt;/label&gt;&lt;button class=&quot;btn btn-ghost remove-packing&quot; type=&quot;button&quot;&gt;Remove&lt;/button&gt;&lt;/div&gt;&#x27;;
+      }
+      function applyPreset(row) {
+        const type = row.querySelector(&#x27;[data-field=&quot;type&quot;]&#x27;).value;
+        const preset = packingPresets[type];
+        row.querySelector(&#x27;[data-field=&quot;quantity-label&quot;]&#x27;).textContent = &#x27;No. of &#x27; + preset.unitLabel;
+        [&#x27;length&#x27;, &#x27;breadth&#x27;, &#x27;height&#x27;].forEach(field =&gt; {
+          const input = row.querySelector(&#x27;[data-field=&quot;&#x27; + field + &#x27;&quot;]&#x27;);
+          input.value = preset[field];
+          input.readOnly = !type.endsWith(&#x27;-free&#x27;) &amp;&amp; !type.startsWith(&#x27;pouch-&#x27;);
+        });
+        updateTare(row);
+      }
+      function updateTare(row) {
+        const type = row.querySelector(&#x27;[data-field=&quot;type&quot;]&#x27;).value;
+        const tare = row.querySelector(&#x27;[data-field=&quot;tare&quot;]&#x27;);
+        if (type.endsWith(&#x27;-free&#x27;)) {
+          tare.readOnly = false;
+          tare.value = packingPresets[type].tarePerBox;
+          return;
+        }
+        tare.readOnly = true;
+        const boxes = Number(row.querySelector(&#x27;[data-field=&quot;boxes&quot;]&#x27;).value) || 0;
+        tare.value = (packingPresets[type].tarePerBox * boxes).toFixed(3);
+      }
+      function getPackings() {
+        return Array.from(root.querySelectorAll(&#x27;.packing-option&#x27;)).map(row =&gt; {
+          const get = (field) =&gt; row.querySelector(&#x27;[data-field=&quot;&#x27; + field + &#x27;&quot;]&#x27;).value;
+          const preset = packingPresets[get(&#x27;type&#x27;)];
+          return { stage: row.dataset.stage, type: get(&#x27;type&#x27;), label: preset.label, kind: preset.kind, unitLabel: preset.unitLabel, boxes: Number(get(&#x27;boxes&#x27;)), length: Number(get(&#x27;length&#x27;)), breadth: Number(get(&#x27;breadth&#x27;)), height: Number(get(&#x27;height&#x27;)), tare: Number(get(&#x27;tare&#x27;)) };
+        });
+      }
+      function calculate() {
+        const from = $(&#x27;fromPin&#x27;).value.trim(), to = $(&#x27;toPin&#x27;).value.trim();
+        const item = number(&#x27;itemWeight&#x27;);
+        const service = shippingServices[$(&#x27;serviceLevel&#x27;).value];
+        const packings = getPackings();
+        const invalidPacking = packings.some(p =&gt; !Number.isInteger(p.boxes) || p.boxes &lt; 1 || ![p.length, p.breadth, p.height].every(v =&gt; Number.isFinite(v) &amp;&amp; v &gt;= 0.01) || !Number.isFinite(p.tare) || p.tare &lt; 0);
+        if (!/^\d{6}$/.test(from) || !/^\d{6}$/.test(to) || !Number.isFinite(item) || item &lt; 0.01 || invalidPacking) {
+          $(&#x27;validation&#x27;).textContent = &#x27;Please enter valid six-digit PIN codes, commodity weight and packing measurements.&#x27;;
+          return;
+        }
+        $(&#x27;validation&#x27;).textContent = &#x27;&#x27;;
+        $(&#x27;quoteResults&#x27;).hidden = false;
+        $(&#x27;carrierResults&#x27;).hidden = false;
+        const actual = item + packings.reduce((total, p) =&gt; total + p.tare, 0);
+        const volumetric = packings.reduce((total, p) =&gt; total + (p.stage === &#x27;outer&#x27; ? (p.length * p.breadth * p.height / 5000) * p.boxes : 0), 0);
+        const billable = Math.max(actual, volumetric);
+        const [zone, multiplier] = getZone(from, to);
+        const packingCost = packings.reduce((total, p) =&gt; total + (p.stage === &#x27;outer&#x27; ? (p.kind === &#x27;carton&#x27; ? 18 : 9) * p.boxes : 0), 0);
+        const quotes = carriers.map(c =&gt; ({ ...c, service: service.label, tat: $(&#x27;serviceLevel&#x27;).value === &#x27;express&#x27; ? c.expressTat : c.regularTat, transit: Math.min(20, c.transit + service.transitBonus), fee: Math.round(((c.base + c.rate * billable * multiplier + packingCost) * service.feeMultiplier + service.surcharge) * 1.18) }));
+        const lowestFee = Math.min(...quotes.map(q =&gt; q.fee));
+        const highestFee = Math.max(...quotes.map(q =&gt; q.fee));
+        quotes.forEach(q =&gt; {
+          q.cost = highestFee === lowestFee ? 20 : Math.round(20 - ((q.fee - lowestFee) / (highestFee - lowestFee)) * 8);
+          q.score = q.serviceability + q.transit + q.cost + q.reliability + q.flexibility;
+        });
+        const eligibleQuotes = quotes.filter(q =&gt; q.score &gt;= 80).sort((a,b) =&gt; b.score - a.score || a.fee - b.fee);
+        const best = eligibleQuotes[0];
+        $(&#x27;chargeable&#x27;).textContent = billable.toFixed(2) + &#x27; kg&#x27;;
+        $(&#x27;weightNote&#x27;).textContent = &#x27;Actual &#x27; + actual.toFixed(2) + &#x27; kg · Volumetric &#x27; + volumetric.toFixed(2) + &#x27; kg&#x27;;
+        $(&#x27;zone&#x27;).textContent = zone;
+        $(&#x27;zoneNote&#x27;).textContent = pinRegion(from) + &#x27; → &#x27; + pinRegion(to) + &#x27; · zone factor &#x27; + multiplier.toFixed(2) + &#x27;×&#x27;;
+        $(&#x27;recommended&#x27;).textContent = best.name;
+        $(&#x27;recommendationNote&#x27;).textContent = best.score + &#x27;/100 · &#x27; + service.label + &#x27; · &#x27; + best.tat + &#x27; · &#x27; + money.format(best.fee) + &#x27; incl. GST&#x27;;
+        $(&#x27;quoteRows&#x27;).innerHTML = eligibleQuotes.map((q, i) =&gt; &#x27;&lt;tr&gt;&lt;td&gt;&#x27; + q.name + (i === 0 ? &#x27; &lt;span class=&quot;viz-badge&quot;&gt;Recommended&lt;/span&gt;&#x27; : &#x27;&#x27;) + &#x27;&lt;/td&gt;&lt;td&gt;&#x27; + q.service + &#x27;&lt;/td&gt;&lt;td&gt;&#x27; + q.tat + &#x27;&lt;/td&gt;&lt;td&gt;&#x27; + q.serviceability + &#x27;/20&lt;/td&gt;&lt;td&gt;&#x27; + q.transit + &#x27;/20&lt;/td&gt;&lt;td&gt;&#x27; + q.cost + &#x27;/20&lt;/td&gt;&lt;td&gt;&#x27; + q.reliability + &#x27;/20&lt;/td&gt;&lt;td&gt;&#x27; + q.flexibility + &#x27;/20&lt;/td&gt;&lt;td&gt;&lt;strong&gt;&#x27; + q.score + &#x27;/100&lt;/strong&gt;&lt;/td&gt;&lt;td class=&quot;amount&quot;&gt;&#x27; + money.format(q.fee) + &#x27;&lt;/td&gt;&lt;/tr&gt;&#x27;).join(&#x27;&#x27;);
+        const packingName = packings.map(p =&gt; (p.stage === &#x27;inner&#x27; ? &#x27;Inner: &#x27; : &#x27;Outer: &#x27;) + p.boxes + &#x27; &#x27; + p.unitLabel + &#x27; × &#x27; + p.label + (p.stage === &#x27;outer&#x27; ? &#x27; (&#x27; + p.length + &#x27; × &#x27; + p.breadth + &#x27; × &#x27; + p.height + &#x27; cm; &#x27; : &#x27; (&#x27;) + &#x27;total tare &#x27; + p.tare.toFixed(3) + &#x27; kg)&#x27;).join(&#x27; · &#x27;);
+        $(&#x27;quoteRef&#x27;).textContent = newReference();
+        $(&#x27;issuedAt&#x27;).textContent = new Date().toLocaleString(&#x27;en-IN&#x27;, { dateStyle: &#x27;medium&#x27;, timeStyle: &#x27;short&#x27; });
+        $(&#x27;quoteDetails&#x27;).textContent = &#x27;From &#x27; + from + &#x27; to &#x27; + to + &#x27; · &#x27; + service.label + &#x27; shipping · commodity &#x27; + item.toFixed(2) + &#x27; kg · &#x27; + packingName + &#x27;.&#x27;;
+        $(&#x27;reportCarrier&#x27;).textContent = best.name + &#x27; — &#x27; + best.fit + &#x27; (&#x27; + best.score + &#x27;/100)&#x27;;
+        $(&#x27;reportTat&#x27;).textContent = best.tat;
+        $(&#x27;reportFee&#x27;).textContent = money.format(best.fee);
+        $(&#x27;scoreDetail&#x27;).textContent = &#x27;Score breakdown: Serviceability &#x27; + best.serviceability + &#x27;/20 · Transit/SLA &#x27; + best.transit + &#x27;/20 · Total cost &#x27; + best.cost + &#x27;/20 · Reliability &#x27; + best.reliability + &#x27;/20 · Operational flexibility &#x27; + best.flexibility + &#x27;/20.&#x27;;
+        const shareText = &#x27;Shipping quote &#x27; + $(&#x27;quoteRef&#x27;).textContent + &#x27;\n&#x27; + $(&#x27;quoteDetails&#x27;).textContent + &#x27;\nRecommended: &#x27; + best.name + &#x27; (&#x27; + best.score + &#x27;/100)\nEstimated TAT: &#x27; + best.tat + &#x27;\nFee incl. 18% GST: &#x27; + money.format(best.fee);
+        $(&#x27;emailQuote&#x27;).href = &#x27;mailto:?subject=&#x27; + encodeURIComponent(&#x27;Shipping quote &#x27; + $(&#x27;quoteRef&#x27;).textContent) + &#x27;&amp;body=&#x27; + encodeURIComponent(shareText);
+        $(&#x27;whatsAppQuote&#x27;).href = &#x27;https://wa.me/?text=&#x27; + encodeURIComponent(shareText);
+        $(&#x27;quoteModal&#x27;).showModal();
+      }
+      $(&#x27;calculate&#x27;).addEventListener(&#x27;click&#x27;, calculate);
+      function resetCalculator() {
+        $(&#x27;fromPin&#x27;).value = &#x27;560001&#x27;;
+        $(&#x27;toPin&#x27;).value = &#x27;400001&#x27;;
+        $(&#x27;itemWeight&#x27;).value = &#x27;4&#x27;;
+        $(&#x27;serviceLevel&#x27;).value = &#x27;regular&#x27;;
+        $(&#x27;innerPackingOptions&#x27;).innerHTML = &#x27;&#x27;;
+        $(&#x27;outerPackingOptions&#x27;).innerHTML = outerPackingMarkup(1);
+        $(&#x27;chargeable&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;weightNote&#x27;).textContent = &#x27;Actual or volumetric, whichever is higher&#x27;;
+        $(&#x27;zone&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;zoneNote&#x27;).textContent = &#x27;Based on PIN prefix&#x27;;
+        $(&#x27;recommended&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;recommendationNote&#x27;).textContent = &#x27;Best overall carrier score&#x27;;
+        $(&#x27;quoteRows&#x27;).innerHTML = &#x27;&#x27;;
+        $(&#x27;quoteResults&#x27;).hidden = true;
+        $(&#x27;carrierResults&#x27;).hidden = true;
+        $(&#x27;quoteRef&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;issuedAt&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;quoteDetails&#x27;).textContent = &#x27;Enter shipment details and calculate your quote.&#x27;;
+        $(&#x27;reportCarrier&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;reportTat&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;reportFee&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;scoreDetail&#x27;).textContent = &#x27;—&#x27;;
+        $(&#x27;emailQuote&#x27;).href = &#x27;#&#x27;;
+        $(&#x27;whatsAppQuote&#x27;).href = &#x27;#&#x27;;
+        $(&#x27;validation&#x27;).textContent = &#x27;&#x27;;
+        if ($(&#x27;quoteModal&#x27;).open) $(&#x27;quoteModal&#x27;).close();
+      }
+      $(&#x27;clearQuote&#x27;).addEventListener(&#x27;click&#x27;, resetCalculator);
+      $(&#x27;closeQuote&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; $(&#x27;quoteModal&#x27;).close());
+      $(&#x27;addInnerPacking&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+        const nextIndex = $(&#x27;innerPackingOptions&#x27;).querySelectorAll(&#x27;.packing-option&#x27;).length + 1;
+        $(&#x27;innerPackingOptions&#x27;).insertAdjacentHTML(&#x27;beforeend&#x27;, innerPackingMarkup(nextIndex));
+        applyPreset($(&#x27;innerPackingOptions&#x27;).lastElementChild);
+      });
+      $(&#x27;addOuterPacking&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+        const nextIndex = $(&#x27;outerPackingOptions&#x27;).querySelectorAll(&#x27;.packing-option&#x27;).length + 1;
+        $(&#x27;outerPackingOptions&#x27;).insertAdjacentHTML(&#x27;beforeend&#x27;, outerPackingMarkup(nextIndex));
+      });
+      $(&#x27;packingArea&#x27;).addEventListener(&#x27;change&#x27;, (event) =&gt; {
+        if (event.target.matches(&#x27;[data-field=&quot;type&quot;]&#x27;)) applyPreset(event.target.closest(&#x27;.packing-option&#x27;));
+      });
+      $(&#x27;packingArea&#x27;).addEventListener(&#x27;input&#x27;, (event) =&gt; {
+        if (event.target.matches(&#x27;[data-field=&quot;boxes&quot;]&#x27;)) updateTare(event.target.closest(&#x27;.packing-option&#x27;));
+      });
+      $(&#x27;packingArea&#x27;).addEventListener(&#x27;click&#x27;, (event) =&gt; {
+        if (!event.target.classList.contains(&#x27;remove-packing&#x27;)) return;
+        const row = event.target.closest(&#x27;.packing-option&#x27;);
+        const container = row.dataset.stage === &#x27;inner&#x27; ? $(&#x27;innerPackingOptions&#x27;) : $(&#x27;outerPackingOptions&#x27;);
+        if (row.dataset.stage === &#x27;outer&#x27; &amp;&amp; container.querySelectorAll(&#x27;.packing-option&#x27;).length === 1) return;
+        row.remove();
+        Array.from(container.querySelectorAll(&#x27;.packing-option&#x27;)).forEach((row, index) =&gt; {
+          row.dataset.packingIndex = index + 1;
+          row.querySelector(&#x27;strong&#x27;).textContent = (row.dataset.stage === &#x27;inner&#x27; ? &#x27;Inner packing &#x27; : &#x27;Outer packing &#x27;) + (index + 1);
+        });
+      });
+      resetCalculator();
+    })();
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>
